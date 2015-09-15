@@ -5,5 +5,6 @@
 </head>
 <body>
 <h2>User list</h2>
+<a href="index.html">HOME</a>
 </body>
 </html>
