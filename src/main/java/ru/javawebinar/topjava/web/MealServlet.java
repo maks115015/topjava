@@ -22,7 +22,7 @@ public class MealServlet extends HttpServlet {
 
         if(request.getParameter("action").equals("editMeal")){
             int id=Integer.parseInt(request.getParameter("id"));
-            this.edit(request, response,id);
+            this.edit(request, response, id);
         }
         response.sendRedirect("mealList.jsp");
     }
@@ -32,7 +32,7 @@ public class MealServlet extends HttpServlet {
        try {
            if (request.getParameter("action").equals("delete")){
                UserMealsUtil.delete(Integer.parseInt(request.getParameter("meal")));
-               response.sendRedirect("mealList.jsp");
+
            }
 
            else if(request.getParameter("action").equals("edit")){
@@ -42,7 +42,7 @@ public class MealServlet extends HttpServlet {
                response.sendRedirect("mealList.jsp");
            }
        }catch(Exception e){}
-
+        response.sendRedirect("mealList.jsp");
 
 
     }
@@ -52,7 +52,7 @@ public class MealServlet extends HttpServlet {
         String description=request.getParameter("Description");
         String date=request.getParameter("Date");
         int calories =Integer.parseInt(request.getParameter("Calories"));
-        UserMealsUtil.mealsCreateAndProceed(LocalDateTime.now(), description, calories);
+        UserMealsUtil.mealsCreateAndProceed(LocalDateTime.parse(date), description, calories);
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response,int id) throws IOException{
