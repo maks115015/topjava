@@ -16,6 +16,14 @@
     <h3>Meal list</h3>
     <a href="meals?action=create">Add Meal</a>
     <hr>
+    <form method = "POST" action="meals">
+        <select size = "2" multiple name = "name[]">
+            <option disabled>Выберите пользователя</option>
+            <option selected value = "1">Пользователь1</option>
+            <option value = "2">Пользователь2</option>
+        </select>
+        <input type = "submit" value = "Выбрать">
+    </form>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>

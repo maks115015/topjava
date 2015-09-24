@@ -1,10 +1,13 @@
 package ru.javawebinar.topjava.web;
 
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.javawebinar.topjava.LoggedUser;
 import ru.javawebinar.topjava.LoggerWrapper;
 import ru.javawebinar.topjava.model.UserMeal;
-import ru.javawebinar.topjava.repository.UserMealRepository;
-import ru.javawebinar.topjava.repository.mock.InMemoryUserMealRepository;
 import ru.javawebinar.topjava.util.UserMealsUtil;
+import ru.javawebinar.topjava.web.meal.UserMealRestController;
+import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,23 +25,30 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final LoggerWrapper LOG = LoggerWrapper.get(MealServlet.class);
 
-    private UserMealRepository repository;
+    UserMealRestController userMealRestController=null;
+    int userId=LoggedUser.getUserId();
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        repository = new InMemoryUserMealRepository();
+        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
+            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
+            userMealRestController=appCtx.getBean(UserMealRestController.class);
+        }
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
         UserMeal userMeal = new UserMeal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
+                userId, LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories")));
         LOG.info(userMeal.isNew() ? "Create {}" : "Update {}", userMeal);
-        repository.save(userMeal);
+        if(userMeal.isNew()) userMealRestController.create(userMeal);
+        else userMealRestController.update(userMeal, Integer.parseInt(id));
         response.sendRedirect("meals");
     }
 
@@ -48,17 +58,17 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             LOG.info("getAll");
             request.setAttribute("mealList",
-                    UserMealsUtil.getWithExceeded(repository.getAll(), 2000));
+                    UserMealsUtil.getWithExceeded(userMealRestController.getAll(), 2000));
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
         } else if (action.equals("delete")) {
             int id = getId(request);
             LOG.info("Delete {}", id);
-            repository.delete(id);
+            userMealRestController.delete(id);
             response.sendRedirect("meals");
         } else {
             final UserMeal meal = action.equals("create") ?
-                    new UserMeal(LocalDateTime.now(), "", 1000) :
-                    repository.get(getId(request));
+                    new UserMeal(userId,LocalDateTime.now(), "", 1000) :
+                    userMealRestController.get(getId(request));
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("mealEdit.jsp").forward(request, response);
         }
