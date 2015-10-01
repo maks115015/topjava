@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.UserTestData;
@@ -23,17 +22,13 @@ import static ru.javawebinar.topjava.UserTestData.USER;
  * GKislin
  * 13.03.2015.
  */
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/mock.xml"
-})
+@ContextConfiguration({"classpath:spring/spring-app.xml","classpath:spring/mock.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SpringAdminInMemoryTest {
 
     @Autowired
     private AdminRestController controller;
 
-    @Qualifier("inMemoryUserRepositoryImpl")
     @Autowired
     private UserRepository repository;
 
