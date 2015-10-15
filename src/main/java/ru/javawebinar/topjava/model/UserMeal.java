@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 /**
  * GKislin
@@ -29,6 +30,13 @@ public class UserMeal extends BaseEntity {
     public static final String DELETE = "UserMeal.delete";
     public static final String GET_BETWEEN = "UserMeal.getBetween";
 
+    public static Comparator<UserMeal> comparator=new Comparator<UserMeal>() {
+        @Override
+        public int compare(UserMeal o1, UserMeal o2) {
+            return o2.getDateTime().compareTo(o1.getDateTime());
+        }
+    };
+
     @Column(name = "date_time", nullable = false)
     @NotNull
     protected LocalDateTime dateTime;
@@ -40,7 +48,7 @@ public class UserMeal extends BaseEntity {
     @Column(name = "calories")
     protected int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
