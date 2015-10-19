@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setBundle basename="messages.app"/>
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
@@ -12,8 +11,8 @@
 <section>
     <form method="post" action="users">
     Login as: <select name="userId">
-    <option value="1" selected>User</option>
-    <option value="2">Admin</option>
+    <option value="100000" selected>User</option>
+    <option value="100001">Admin</option>
 </select>
     <button type="submit">Выбрать</button>
 </form>
