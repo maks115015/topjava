@@ -8,21 +8,24 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: gkislin
  * Date: 26.08.2014
  */
-
+@Transactional
 @Repository
-public class JdbcUserRepositoryImpl implements UserRepository {
+public class JdbcUserRepositoryImpl implements UserRepository, GetMethodInterface {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
+    private static final  BeanPropertyRowMapper<String> ROW_MAPPER2 = BeanPropertyRowMapper.newInstance(String.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -40,6 +43,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
+    @Transactional
     @Override
     public User save(User user) {
         MapSqlParameterSource map = new MapSqlParameterSource()
@@ -63,10 +67,12 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
@@ -81,5 +87,19 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         return jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
+    }
+
+    @Override
+    public Set<Role> getUserRoles(int id){
+        Set<Role> roles=new HashSet<>();
+        //List<Map<String, Object>> rs=jdbcTemplate.queryForList("SELECT role FROM user_roles WHERE user_id=?", id);
+        List<String> list=jdbcTemplate.queryForList("SELECT role FROM user_roles WHERE user_id=?",String.class ,id);
+//        for(Map<String, Object> set:rs){
+//            roles.add(Role.valueOf(set.get("role").toString()));
+//        }
+        for(String list1:list){
+            roles.add(Role.valueOf(list1));
+        }
+        return roles;
     }
 }

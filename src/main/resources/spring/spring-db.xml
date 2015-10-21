@@ -54,6 +54,18 @@
         <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
             <constructor-arg ref="dataSource"/>
         </bean>
+
+        <context:annotation-config/>
+        <!-- Add this tag to enable annotations transactions -->
+        <tx:annotation-driven  transaction-manager="transactionManager"/>
+        <bean id="transactionManager"
+              class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource"></property>
+        </bean>
+
+
+
+
     </beans>
 
     <beans profile="datajpa,jpa">
