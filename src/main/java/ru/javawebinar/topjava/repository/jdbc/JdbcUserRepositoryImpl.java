@@ -1,5 +1,5 @@
 package ru.javawebinar.topjava.repository.jdbc;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -26,9 +26,10 @@ import java.util.stream.Collectors;
  * User: gkislin
  * Date: 26.08.2014
  */
-
+@Transactional
 @Repository
 public class JdbcUserRepositoryImpl implements UserRepository {
+
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -73,6 +74,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         return user;
     }
 
+    @Transactional
     @Override
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;

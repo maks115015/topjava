@@ -1,10 +1,16 @@
 package ru.javawebinar.topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 /**
  * GKislin
@@ -22,6 +28,7 @@ import java.time.LocalDateTime;
 //                "m.description=:desc where m.id=:id and m.user.id=:userId")
 })
 @Entity
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE,setterVisibility = NONE )
 @Table(name = "meals")
 public class UserMeal extends BaseEntity {
     public static final String GET = "UserMeal.get";
@@ -29,6 +36,7 @@ public class UserMeal extends BaseEntity {
     public static final String DELETE = "UserMeal.delete";
     public static final String GET_BETWEEN = "UserMeal.getBetween";
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "date_time", nullable = false)
     @NotNull
     protected LocalDateTime dateTime;
@@ -40,11 +48,16 @@ public class UserMeal extends BaseEntity {
     @Column(name = "calories")
     protected int calories;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public UserMeal() {
+    }
+
+    public UserMeal(UserMeal u) {
+        this(u.getId(), u.getDateTime(), u.getDescription(), u.getCalories());
     }
 
     public UserMeal(LocalDateTime dateTime, String description, int calories) {
