@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
+import ru.javawebinar.topjava.to.UserMealWithExceed;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -31,6 +32,7 @@ public class MealTestData {
     public static UserMeal userMeal3 =new UserMeal(100004,LocalDateTime.parse("2015-10-24T09:00:00"), "завтрак",1000);
 
     public static final ModelMatcher<UserMeal, String> MATCHER = new ToStringModelMatcher<>(UserMeal.class);
+    public static final ModelMatcher<UserMealWithExceed, String> MATCHER_WITH_EXCEED = new ToStringModelMatcher<>(UserMealWithExceed.class);
 
     public static final int MEAL1_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 8;
