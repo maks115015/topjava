@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.web.meal;
 
+
+
 import org.junit.Test;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 
@@ -7,8 +9,8 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.topjava.MealTestData.MEAL1;
-import static ru.javawebinar.topjava.MealTestData.MEAL1_ID;
+import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 
 /**
  * GKislin
@@ -18,7 +20,7 @@ public class UserMealControllerTest extends AbstractControllerTest {
 
     @Test
     public void testMealList() throws Exception {
-        mockMvc.perform(get("/meals"))
+        mockMvc.perform(get("/meals").with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("mealList"))
