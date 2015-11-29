@@ -1,14 +1,16 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
 import ru.javawebinar.topjava.util.TimeUtil;
+import ru.javawebinar.topjava.util.exception.ValidationException;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -25,21 +27,26 @@ public class UserMealAjaxController extends AbstractUserMealController {
         return super.getAll();
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserMeal get(@PathVariable("id") int id) {
+        return super.get(id);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void updateOrCreate(@RequestParam("id") int id,
-                               @RequestParam("datetime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                               @RequestParam("description") String description,
-                               @RequestParam("calories") int calories) {
-        UserMeal meal = new UserMeal(id, dateTime, description, calories);
-        if (id == 0) {
+    public void updateOrCreate(@Valid UserMeal meal, BindingResult result, SessionStatus status) {
+        if (result.hasErrors()) {
+            throw new ValidationException(result);
+        }
+        status.setComplete();
+        if (meal.getId() == 0) {
             super.create(meal);
         } else {
-            super.update(meal, id);
+            super.update(meal, meal.getId());
         }
     }
 
