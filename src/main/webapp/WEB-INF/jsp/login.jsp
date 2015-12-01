@@ -13,8 +13,9 @@
         <div class="navbar-header navbar-brand"><fmt:message key="app.title"/></div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
+                <a href="https://oauth.vk.com/authorize?client_id=5171251&display=popup&redirect_uri=https://caloriesmanagment.herokuapp.com/oauth&scope=eamil&response_type=token&v=5.40">VK</a>
                 <li>
-                    <form:form class="navbar-form" role="form" action="spring_security_check"
+                     <form:form class="navbar-form" role="form" action="spring_security_check"
                                method="post">
                         <div class="form-group">
                             <input type="text" placeholder="Email" class="form-control" name='username'>
@@ -25,7 +26,6 @@
                         <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
                     </form:form>
                 </li>
-                <div><a href="https://oauth.vk.com/authorize?client_id=5171251&display=popup&redirect_uri=https://caloriesmanagment.herokuapp.com/oauth&scope=eamil&response_type=token&v=5.40">VK</a></div>
                 <jsp:include page="fragments/lang.jsp"/>
             </ul>
         </div>
