@@ -93,7 +93,7 @@ public class UserMealRestControllerTest extends AbstractControllerTest {
         created.setId(returned.getId());
 
         MATCHER.assertEquals(created, returned);
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN_MEAL2, created, ADMIN_MEAL), service.getAll(MEAL1_ID));
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN_MEAL2, created, ADMIN_MEAL), service.getAll(ADMIN_ID));
     }
 
     @Test

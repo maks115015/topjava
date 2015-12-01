@@ -116,3 +116,4 @@ function renderDeleteBtn(data, type, row) {
     }
     return data;
 }
+

@@ -40,7 +40,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-
     private SimpleJdbcInsert insertUser;
 
     @Autowired
