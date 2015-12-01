@@ -25,7 +25,7 @@
                         <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
                     </form:form>
                 </li>
-                <div><a href="https://oauth.vk.com/authorize?client_id=5171251&display=popup&redirect_uri=http://localhost:8080/topjava&scope=eamil&response_type=token&v=5.40">VK</a></div>
+                <div><a href="https://oauth.vk.com/authorize?client_id=5171251&display=popup&redirect_uri=https://caloriesmanagment.herokuapp.com/oauth&scope=eamil&response_type=token&v=5.40">VK</a></div>
                 <jsp:include page="fragments/lang.jsp"/>
             </ul>
         </div>
